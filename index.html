@@ -106,8 +106,9 @@
     }
 
     .card:hover {
-      transform: translateY(-6px) scale(1.015);
-      box-shadow: 0 24px 48px rgba(0,0,0,0.10);
+      transform: translateY(-8px) scale(1.07);
+      box-shadow: 0 32px 64px rgba(0,0,0,0.15);
+      z-index: 10;
     }
 
     /* subtle noise texture */
@@ -196,6 +197,82 @@
     .grid-row:nth-child(4) { animation-delay: 0.34s; }
     .grid-row:nth-child(5) { animation-delay: 0.42s; }
     .grid-row:nth-child(6) { animation-delay: 0.50s; }
+
+    /* ── LIGHTBOX ── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 14, 13, 0.88);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    #lightbox.open {
+      display: flex;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    #lightbox-card {
+      width: min(72vw, 560px);
+      aspect-ratio: 4 / 5;
+      border: 1px solid rgba(255,255,255,0.08);
+      position: relative;
+      cursor: default;
+      animation: popIn 0.3s cubic-bezier(.22,.68,0,1.2);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.82); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+    #lightbox-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      border: none;
+      background: none;
+      transition: color 0.2s;
+    }
+
+    #lightbox-close:hover { color: #fff; }
+
+    #lightbox-number {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.04em;
+    }
+
+    #lightbox-label {
+      position: absolute;
+      bottom: 18px;
+      left: 20px;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
   </style>
 </head>
 <body>
@@ -254,6 +331,54 @@
   </main>
 
   <footer>© 2026 Maciej — All rights reserved</footer>
+
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <div id="lightbox-card">
+      <button id="lightbox-close">Close</button>
+      <span id="lightbox-number"></span>
+      <span id="lightbox-label"></span>
+    </div>
+  </div>
+
+  <script>
+    const lightbox = document.getElementById('lightbox');
+    const lbCard   = document.getElementById('lightbox-card');
+    const lbNumber = document.getElementById('lightbox-number');
+    const lbLabel  = document.getElementById('lightbox-label');
+    const lbClose  = document.getElementById('lightbox-close');
+
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => {
+        const num   = card.querySelector('.card-number').textContent;
+        const label = card.querySelector('.card-label').textContent;
+        const bg    = getComputedStyle(card).backgroundColor;
+
+        lbCard.style.background = bg;
+        lbNumber.textContent = num;
+        lbLabel.textContent  = label;
+
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    lbClose.addEventListener('click', closeLightbox);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
 
 </body>
 </html>

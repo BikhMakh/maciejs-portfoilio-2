@@ -106,8 +106,8 @@
     }
 
     .card:hover {
-      transform: translateY(-8px) scale(1.07);
-      box-shadow: 0 32px 64px rgba(0,0,0,0.15);
+      transform: translateY(-12px) scale(1.18);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.22);
       z-index: 10;
     }
 
@@ -223,7 +223,10 @@
     }
 
     #lightbox-card {
-      width: min(72vw, 560px);
+      width: min(88vw, 90vh * 4 / 5);
+      max-width: 900px;
+      height: min(88vh, 88vw * 5 / 4);
+      max-height: 90vh;
       aspect-ratio: 4 / 5;
       border: 1px solid rgba(255,255,255,0.08);
       position: relative;
@@ -356,6 +359,16 @@
         const bg    = getComputedStyle(card).backgroundColor;
 
         lbCard.style.background = bg;
+        // If card has an image, show it full size
+        const img = card.querySelector('img');
+        const existingImg = lbCard.querySelector('img.lb-img');
+        if (existingImg) existingImg.remove();
+        if (img) {
+          const clone = img.cloneNode();
+          clone.className = 'lb-img';
+          clone.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
+          lbCard.appendChild(clone);
+        }
         lbNumber.textContent = num;
         lbLabel.textContent  = label;
 

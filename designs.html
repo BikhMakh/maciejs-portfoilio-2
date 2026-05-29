@@ -85,87 +85,58 @@
       gap: var(--gap);
       margin-bottom: var(--gap);
       animation: fadeUp 0.6s ease both;
+      /* all card-wraps in a row share the same height */
+      align-items: start;
     }
 
-    .grid-row:nth-child(1) { animation-delay: 0.1s; }
+    .grid-row:nth-child(1) { animation-delay: 0.10s; }
     .grid-row:nth-child(2) { animation-delay: 0.18s; }
     .grid-row:nth-child(3) { animation-delay: 0.26s; }
     .grid-row:nth-child(4) { animation-delay: 0.34s; }
     .grid-row:nth-child(5) { animation-delay: 0.42s; }
     .grid-row:nth-child(6) { animation-delay: 0.50s; }
 
+    /* ── CARD WRAP ── */
+    .card-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
     /* ── CARD ── */
-   ```css id="owmksz"
-```css id="ayvrcn"
-.card {
-  position: relative;
-  overflow: hidden;
-  background: var(--placeholder-bg);
-  border: 1px solid var(--placeholder-border);
-  aspect-ratio: 4 / 3;
-  cursor: pointer;
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: var(--placeholder-bg);
+      border: 1px solid var(--placeholder-border);
+      /* Fixed height so all cards in a row are even */
+      height: 320px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.38s cubic-bezier(.22,.68,0,1.2),
+                  box-shadow 0.38s ease;
+    }
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 16px;
-
-  transition:
-    transform 0.38s cubic-bezier(.22,.68,0,1.2),
-    box-shadow 0.38s ease;
-}
-```
-
-```css id="nlrbvz"
-```css id="zlyxui"
-.card img {
-  max-width: 100%;
-  max-height: 100%;
-
-  width: auto;
-  height: auto;
-
-  object-fit: contain;
-  object-position: center;
-
-  display: block;
-
-  z-index: 0;
-
-  transition: transform 0.35s ease;
-}
-
-.card:hover img {
-  transform: scale(1.03);
-}
-```
-
-
-/* Hover Zoom */
-.card:hover img {
-  transform: translate(-50%, -50%) scale(1.04);
-}
-```
-
-
-.card:hover img {
-  transform: scale(1.04);
-}
-```
+    /* Image sits inside with padding, centered, never cropped */
+    .card img {
+      max-width: calc(100% - 24px);
+      max-height: calc(100% - 24px);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
 
     .card::before {
       content: '';
       position: absolute;
       inset: 0;
       background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 60%);
-      z-index: 1;
-    }
-
-    .card:hover {
-      transform: translateY(-12px) scale(1.18);
-      box-shadow: 0 40px 80px rgba(0,0,0,0.22);
-      z-index: 10;
+      z-index: 2;
+      pointer-events: none;
     }
 
     .card::after {
@@ -174,36 +145,38 @@
       inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
       opacity: 0.35;
-      z-index: 2;
+      z-index: 3;
       pointer-events: none;
     }
 
-    .card-label {
-      display: block;
-      text-align: center;
-      margin-top: 12px;
-      font-size: 0.82rem;
-      font-weight: 400;
-      letter-spacing: 0.06em;
-      color: var(--accent);
+    .card:hover {
+      transform: translateY(-12px) scale(1.08);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.22);
+      z-index: 10;
     }
 
     .card-number {
       position: absolute;
-      top: 18px;
-      right: 20px;
-      z-index: 3;
+      top: 12px;
+      right: 14px;
+      z-index: 4;
       font-family: 'Cormorant Garamond', serif;
       font-size: 0.85rem;
       color: var(--placeholder-border);
       letter-spacing: 0.04em;
     }
 
-    .card-wrap {
-      display: flex;
-      flex-direction: column;
+    .card-label {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--accent);
     }
 
+    /* row tones */
     .row-1 .card { background: #dedad5; }
     .row-2 .card { background: #e4e1dc; }
     .row-3 .card { background: #d8d5d0; }
@@ -243,13 +216,13 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(15, 14, 13, 0.88);
+      background: rgba(15, 14, 13, 0.9);
       z-index: 1000;
       align-items: center;
       justify-content: center;
       cursor: zoom-out;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     #lightbox.open {
@@ -257,28 +230,23 @@
       animation: fadeIn 0.25s ease;
     }
 
-    #lightbox-card {
+    #lightbox-inner {
       position: relative;
-      cursor: default;
       animation: popIn 0.3s cubic-bezier(.22,.68,0,1.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    #lightbox-card img.lb-img {
+    #lightbox-inner img.lb-img {
       display: block;
-      max-width: 92vw;
-      max-height: 88vh;
+      max-width: 90vw;
+      max-height: 85vh;
       width: auto;
       height: auto;
-      object-fit: contain;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
     }
 
     #lightbox-close {
       position: absolute;
-      top: -40px;
+      top: -36px;
       right: 0;
       color: rgba(255,255,255,0.55);
       font-size: 0.72rem;
@@ -294,24 +262,13 @@
 
     #lightbox-close:hover { color: #fff; }
 
-    #lightbox-number {
-      position: absolute;
-      top: 18px;
-      right: 20px;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
-      color: rgba(255,255,255,0.3);
-      letter-spacing: 0.04em;
-    }
-
-    #lightbox-label {
-      position: absolute;
-      bottom: 18px;
-      left: 20px;
-      font-size: 0.7rem;
+    #lightbox-caption {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 0.72rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.4);
     }
 
     /* ── MOBILE ── */
@@ -319,12 +276,24 @@
       header { padding: 40px 24px 32px; gap: 16px; }
       header h1 { font-size: clamp(1.4rem, 6vw, 2rem); }
       main { padding: 0 16px 80px; }
-      .grid-row { grid-template-columns: 1fr; gap: 16px; margin-bottom: 16px; }
+
+      .grid-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .card {
+        height: 260px;
+      }
 
       .card:hover { transform: none; box-shadow: none; }
-      .card-label { font-size: 0.75rem; margin-top: 8px; }
-      #lightbox-card { max-width: 96vw; max-height: 88vh; }
-      #lightbox-card img.lb-img { max-width: 96vw; max-height: 84vh; }
+
+      #lightbox-inner img.lb-img {
+        max-width: 96vw;
+        max-height: 80vh;
+      }
+
       footer { padding: 28px 16px; font-size: 0.65rem; }
     }
   </style>
@@ -338,88 +307,52 @@
   </header>
 
   <nav>
-    <a href="photos.html" >Photography</a>
-    <a href="designs.html" class='active'>Design</a>
+    <a href="photos.html">Photography</a>
+    <a href="designs.html" class="active">Design</a>
   </nav>
 
   <main>
 
     <!-- Row 1 -->
     <div class="grid-row row-1">
-      <div class="card-wrap"><div class="card"><span class="card-number">01</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
-      <div class="card-wrap"><div class="card"><span class="card-number">02</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
-      <div class="card-wrap"><div class="card"><span class="card-number">03</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
+      <div class="card-wrap"><div class="card"><span class="card-number">01</span></div><span class="card-label">Untitled</span></div>
+      <div class="card-wrap"><div class="card"><span class="card-number">02</span></div><span class="card-label">Untitled</span></div>
+      <div class="card-wrap"><div class="card"><span class="card-number">03</span></div><span class="card-label">Untitled</span></div>
     </div>
 
     <!-- Row 2 -->
     <div class="grid-row row-2">
-      <div class="card-wrap"><div class="card"><span class="card-number">04</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
-      <div class="card-wrap"><div class="card"><span class="card-number">05</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
-      <div class="card-wrap"><div class="card"><span class="card-number">06</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
+      <div class="card-wrap"><div class="card"><span class="card-number">04</span></div><span class="card-label">Untitled</span></div>
+      <div class="card-wrap"><div class="card"><span class="card-number">05</span></div><span class="card-label">Untitled</span></div>
+      <div class="card-wrap"><div class="card"><span class="card-number">06</span></div><span class="card-label">Untitled</span></div>
     </div>
 
     <!-- Row 3 -->
     <div class="grid-row row-3">
-      <div class="card-wrap"><div class="card"><span class="card-number">07</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
-      <div class="card-wrap"><div class="card"><span class="card-number">08</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
-      <div class="card-wrap"><div class="card"><span class="card-number">09</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
+      <div class="card-wrap"><div class="card"><span class="card-number">07</span></div><span class="card-label">Untitled</span></div>
+      <div class="card-wrap"><div class="card"><span class="card-number">08</span></div><span class="card-label">Untitled</span></div>
+      <div class="card-wrap"><div class="card"><span class="card-number">09</span></div><span class="card-label">Untitled</span></div>
     </div>
 
     <!-- Row 4 -->
     <div class="grid-row row-4">
-      <div class="card-wrap"><div class="card"><span class="card-number">10</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
-      <div class="card-wrap"><div class="card"><span class="card-number">11</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
-      <div class="card-wrap"><div class="card"><span class="card-number">12</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
+      <div class="card-wrap"><div class="card"><span class="card-number">10</span></div><span class="card-label">Untitled</span></div>
+      <div class="card-wrap"><div class="card"><span class="card-number">11</span></div><span class="card-label">Untitled</span></div>
+      <div class="card-wrap"><div class="card"><span class="card-number">12</span></div><span class="card-label">Untitled</span></div>
     </div>
 
     <!-- Row 5 -->
     <div class="grid-row row-5">
-      <div class="card-wrap"><div class="card"><span class="card-number">13</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
-      <div class="card-wrap"><div class="card"><span class="card-number">14</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
-      <div class="card-wrap"><div class="card"><span class="card-number">15</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
+      <div class="card-wrap"><div class="card"><span class="card-number">13</span></div><span class="card-label">Untitled</span></div>
+      <div class="card-wrap"><div class="card"><span class="card-number">14</span></div><span class="card-label">Untitled</span></div>
+      <div class="card-wrap"><div class="card"><span class="card-number">15</span></div><span class="card-label">Untitled</span></div>
     </div>
 
     <!-- Row 6 -->
     <div class="grid-row row-6">
-      <div class="card-wrap"><div class="card"><span class="card-number">16</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
-      <div class="card-wrap"><div class="card"><span class="card-number">17</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
-      <div class="card-wrap"><div class="card"><span class="card-number">18</span></div>
-      <span class="card-label">Untitled</span>
-    </div>
+      <div class="card-wrap"><div class="card"><span class="card-number">16</span></div><span class="card-label">Untitled</span></div>
+      <div class="card-wrap"><div class="card"><span class="card-number">17</span></div><span class="card-label">Untitled</span></div>
+      <div class="card-wrap"><div class="card"><span class="card-number">18</span></div><span class="card-label">Untitled</span></div>
     </div>
 
   </main>
@@ -428,43 +361,36 @@
 
   <!-- Lightbox -->
   <div id="lightbox">
-    <div id="lightbox-card">
+    <div id="lightbox-inner">
       <button id="lightbox-close">Close</button>
-      <span id="lightbox-number"></span>
-      <span id="lightbox-label"></span>
     </div>
+    <div id="lightbox-caption"></div>
   </div>
 
   <script>
-    const lightbox = document.getElementById('lightbox');
-    const lbCard   = document.getElementById('lightbox-card');
-    const lbNumber = document.getElementById('lightbox-number');
-    const lbLabel  = document.getElementById('lightbox-label');
-    const lbClose  = document.getElementById('lightbox-close');
+    const lightbox        = document.getElementById('lightbox');
+    const lbInner         = document.getElementById('lightbox-inner');
+    const lbCaption       = document.getElementById('lightbox-caption');
+    const lbClose         = document.getElementById('lightbox-close');
 
     document.querySelectorAll('.card').forEach(card => {
       card.addEventListener('click', () => {
-        const numEl   = card.querySelector('.card-number');
-        const wrapEl  = card.closest('.card-wrap');
-        const labelEl = wrapEl ? wrapEl.querySelector('.card-label') : null;
-        const bg      = getComputedStyle(card).backgroundColor;
-
-        const existingImg = lbCard.querySelector('img.lb-img');
-        if (existingImg) existingImg.remove();
+        // Remove any previous image
+        const old = lbInner.querySelector('img.lb-img');
+        if (old) old.remove();
 
         const img = card.querySelector('img');
         if (img) {
           const full = document.createElement('img');
           full.src = img.src;
           full.className = 'lb-img';
-          lbCard.appendChild(full);
-          lbCard.style.background = 'none';
-        } else {
-          lbCard.style.background = bg;
+          lbInner.appendChild(full);
         }
 
-        lbNumber.textContent = numEl ? numEl.textContent : '';
-        lbLabel.textContent  = labelEl ? labelEl.textContent : '';
+        // Caption = label from card-wrap
+        const wrap = card.closest('.card-wrap');
+        const label = wrap ? wrap.querySelector('.card-label') : null;
+        lbCaption.textContent = label ? label.textContent : '';
 
         lightbox.classList.add('open');
         document.body.style.overflow = 'hidden';
@@ -476,13 +402,13 @@
       document.body.style.overflow = '';
     }
 
-    lightbox.addEventListener('click', (e) => {
+    lightbox.addEventListener('click', e => {
       if (e.target === lightbox) closeLightbox();
     });
 
     lbClose.addEventListener('click', closeLightbox);
 
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeLightbox();
     });
   </script>

@@ -96,6 +96,7 @@
 
     /* ── CARD ── */
     ```css id="owmksz"
+```css id="ayvrcn"
 .card {
   position: relative;
   overflow: hidden;
@@ -108,25 +109,25 @@
   align-items: center;
   justify-content: center;
 
+  padding: 16px;
+
   transition:
     transform 0.38s cubic-bezier(.22,.68,0,1.2),
     box-shadow 0.38s ease;
 }
+```
 
+```css id="pqfzgk"
 .card img {
-  max-width: 88%;
-  max-height: 88%;
-
-  width: auto;
-  height: auto;
-
+  position: absolute;
+  inset: 0;
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+  margin: 12px;
   object-fit: contain;
-  object-position: center;
-
   display: block;
-
-  transition: transform 0.35s ease;
 }
+```
 
 ```css id="nlrbvz"
 .card img {
